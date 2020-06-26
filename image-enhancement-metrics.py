@@ -3,6 +3,15 @@
     pip install scikit-image
 '''
 
+
+'''
+python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/dark/
+python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/gt/
+python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/dcgan/
+python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/retinex/
+python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/our/
+'''
+
 def aa(x):
     return round(x*10000)/10000
 
