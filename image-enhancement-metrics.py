@@ -12,6 +12,32 @@ python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/reti
 python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/our/
 '''
 
+'''
+IF YOU HAVE AN ERROR
+
+sudo subl ~/.local/lib/python3.7/site-packages/skvideo/measure/niqe.py
+img2 = cv2.resize(img,(int(img.shape[0]/2),int(img.shape[1]/2)),interpolation=cv2.INTER_CUBIC)
+# img2 = scipy.misc.imresize(img, 0.5, interp='bicubic', mode='F')
+
+
+
+
+
+ File "/home/gihanchanaka/.local/lib/python3.7/site-packages/skvideo/measure/niqe.py", line 142, in niqe
+    feats = get_patches_test_features(inputVideoData[t, :, :, 0], patch_size)
+  File "/home/gihanchanaka/.local/lib/python3.7/site-packages/skvideo/measure/niqe.py", line 33, in get_patches_test_features
+    return _get_patches_generic(img, patch_size, 0, stride)
+  File "/home/gihanchanaka/.local/lib/python3.7/site-packages/skvideo/measure/niqe.py", line 71, in _get_patches_generic
+    img2 = cv2.resize(img,0.5)
+SystemError: new style getargs format but argument is not a tuple
+
+
+
+
+'''
+
+
+
 def aa(x):
     return round(x*10000)/10000
 
