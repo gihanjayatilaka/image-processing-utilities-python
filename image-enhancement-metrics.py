@@ -3,14 +3,10 @@
     pip install scikit-image
 '''
 
-'''
-python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/dark/
-python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/gt/
-python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/dcgan/
-python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/retinex/
-python image-enhancement-metrics.py -i mercon-results/gt/ -o mercon-results/our/
+def aa(x):
+    return round(x*10000)/10000
 
-'''
+
 import argparse
 import numpy as np
 import cv2 as cv
@@ -27,6 +23,7 @@ if __name__ =='__main__':
     args=argparse.ArgumentParser()
     args.add_argument("--inputFolder","-i",required=True,dest="inputFolder",type=str)
     args.add_argument("--outputFolder","-o",required=True,dest="outputFolder",type=str)
+    args.add_argument("--verbosity","-v",default=False,dest="verbosity",type=bool)
     args=args.parse_args()
 
 
@@ -42,7 +39,11 @@ if __name__ =='__main__':
     
 
     outputFiles = [join(args.outputFolder, f) for f in listdir(args.outputFolder) if isfile(join(args.outputFolder, f))]
-    print("Output files:: ",outputFiles)
+
+    if args.verbosity:
+        print("Input files:: ",inputFiles)
+        print("Output files:: ",outputFiles)
+        
 
     outputImages=[]
     for f in outputFiles:
@@ -59,22 +60,29 @@ if __name__ =='__main__':
     outputImages=np.mean(outputImages,axis=-1)
     outputImages=np.resize(outputImages,(outputImages.shape[0],outputImages.shape[1],outputImages.shape[2],1))
 
+
+    
+
     print("Numpy Shapes {} {} ".format(inputImages.shape,outputImages.shape))
 
 
-    mseVal=np.mean(mse(inputImages,outputImages))
+    mseVal=np.mean(mse(inputImages/255.0,outputImages/255.0))
     psnrVal=np.mean(psnr(inputImages,outputImages))
-    # ssimVal=np.mean(ssim(inputImages,outputImages))
-    # a=np.mean(niqe(inputImages))
-    # b=np.mean(niqe(outputImages))
-    # niqeVal=a/b
+    ssimVal=np.mean(ssim(inputImages,outputImages))
+    a=np.mean(niqe(inputImages))
+    b=np.mean(niqe(outputImages))
+    niqeVal=a/b
 
 
     print("Results after comparing {} and {}".format(args.inputFolder,args.outputFolder))
-    print("MSE\t: {}".format(mseVal))
-    print("PSNR\t: {}".format(psnrVal))
-    # print("SSIM\t: {}".format(ssimVal))
-    # print("NIQE ratio\t: {}".format(mseVal))
+    print("MSE\t\t: {0:.4f}".format(mseVal))
+    print("PSNR\t\t: {0:.4f}".format(psnrVal))
+    print("SSIM\t\t: {0:.4f}".format(ssimVal))
+    print("NIQE ratio\t: {0:.4f}".format(niqeVal))
+
+
+    print("& {:.4f} & {:.4f} & {:.4f} & {:.4f}".format(aa(mseVal),aa(psnrVal),aa(ssimVal),aa(niqeVal)))
+
     print("End of Programs")
 
 
